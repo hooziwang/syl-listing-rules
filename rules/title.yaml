@@ -21,7 +21,29 @@ forbidden:
   - markdown
   - json
   - explanation
+execution:
+  priority:
+    - output
+    - constraints
+    - instruction
+  hard_rule: hard=true 的约束必须全部满足
 instruction: |
-  只生成英文标题。
-  输出 1 行纯文本，不要解释。
+  你只负责生成 Title 部分（英文单行）。
+  必须先执行 constraints，再执行文案润色；若冲突，以 constraints 为最高优先级。
 
+  【硬执行步骤（必须按顺序）】
+  1) 读取输入 keywords 列表，取前 3 个关键词（keywords[1]、keywords[2]、keywords[3]）。
+  2) 在标题中“原样包含”这 3 个关键词：
+     - 大小写可不同，但词序与拼写必须保持原词，不得同义替换、不得拆写、不得改写。
+     - 必须是可直接子串匹配到的完整短语。
+  3) 再补充品牌、规格/数量、核心卖点与主要场景，保证可读自然。
+  4) 控制总长度不超过 constraints.max_chars.value。
+  5) 输出前自检：
+     - 单行纯文本；
+     - 前 3 关键词均可被逐一匹配；
+     - 长度不超上限。
+     若任一项不满足，先重写再输出。
+
+  【输出要求】
+  - 只输出最终标题文本；
+  - 不要解释、不要注释、不要 Markdown、不要 JSON。

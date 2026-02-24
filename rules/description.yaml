@@ -11,7 +11,14 @@ forbidden:
   - markdown
   - json
   - explanation
+execution:
+  priority:
+    - output
+    - constraints
+    - instruction
+  hard_rule: hard=true 的约束必须全部满足
 instruction: |
-  只生成英文产品描述。
-  输出 2 段纯文本，不要解释。
-
+  你只负责生成 Product Description 部分。
+  先读取 output 和 constraints，再写文案；若冲突，以 output/constraints 为准。
+  产出后先自检：段落数量与段落分隔格式，然后再输出最终结果。
+  第一段写核心价值与主要收益，第二段写场景/材质/使用建议，表达自然连贯。

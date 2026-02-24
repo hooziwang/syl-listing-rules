@@ -15,7 +15,19 @@ forbidden:
   - markdown
   - json
   - explanation
+execution:
+  priority:
+    - output
+    - constraints
+    - instruction
+  hard_rule: hard=true 的约束必须全部满足
 instruction: |
-  只生成英文搜索词。
-  输出 1 行纯文本，不要解释。
-
+  你只负责生成 Search Terms 部分。
+  先读取 output 和 constraints，再写文案；若冲突，以 output/constraints 为准。
+  产出后先自检：单行输出、长度上限、分隔符格式，然后再输出最终结果。
+  生成规则（硬执行）：
+  - 仅使用输入关键词库中的原始词项，不新增、不改写；
+  - 去重后按输入顺序保留；
+  - 只取前 8 个词项进行拼接（固定上限），每个词项必须完整；
+  - 词项之间仅用一个空格分隔，不加任何标点；
+  - 最终仅输出一行纯文本，长度必须 <= 250。

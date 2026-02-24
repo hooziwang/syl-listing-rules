@@ -4,7 +4,6 @@ language: en
 purpose: 生成亚马逊 Listing 五点描述（仅英文）
 output:
   format: json_object
-  json_key: bullets
   lines: 5
 constraints:
   min_chars_per_line:
@@ -20,7 +19,33 @@ constraints:
 forbidden:
   - markdown
   - explanation
+execution:
+  priority:
+    - output
+    - constraints
+    - instruction
+  hard_rule: hard=true 的约束必须全部满足
 instruction: |
-  只生成英文五点。
-  只输出 JSON object，格式 {"bullets":["...","...","...","...","..."]}。
+  你只负责生成 Bullet Points 部分（仅英文）。
+  先读取 output 和 constraints，再写文案；若冲突，以 output/constraints 为准。
 
+  【输出协议】
+  - 必须只输出一个合法 JSON object；
+  - 键名固定为 bullets；
+  - 结构固定：{"bullets":["line1","line2","line3","line4","line5"]}；
+  - bullets 的条目数必须严格等于 output.lines。
+
+  【执行步骤（必须按顺序）】
+  1) 先产出恰好 output.lines 条草稿，每条只写 1 个完整句子，并且每条主题不同（规格、材质、使用、场景、价值）。
+  2) 对每条执行“长度闭环”：
+     - 先按 constraints 的计数方式统计长度；
+     - 若偏长，优先删减形容词、重复修饰、次要从句；
+     - 若偏短，补充具体事实（尺寸、材质、数量、场景、收益）；
+     - 反复调整直到满足 constraints.min_chars_per_line 与 constraints.max_chars_per_line。
+  3) 再做质量检查：句子完整、无截断词、无空条目、无编号。
+  4) 最后做协议检查：JSON 合法、键名正确、条数正确；任一不满足先重写再输出。
+
+  【质量要求】
+  - 每条结尾使用英文句号 "."；
+  - 在满足约束前提下，优先可读性，避免堆砌关键词；
+  - 长度优先落在区间中段，减少边界震荡。
