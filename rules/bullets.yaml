@@ -29,6 +29,7 @@ execution:
     protocol: json_lines
   repair:
     granularity: item
+    item_json_field: item
   fallback:
     disable_thinking_on_length_error: true
 instruction: |
@@ -50,6 +51,12 @@ instruction: |
      - 反复调整直到满足 constraints.min_chars_per_line 与 constraints.max_chars_per_line。
   3) 再做质量检查：句子完整、无截断词、无空条目、无编号。
   4) 最后做协议检查：JSON 合法、键名正确、条数正确；任一不满足先重写再输出。
+
+  【单条修复协议（当任务是“只修复第 N 条”时）】
+  - 必须只返回一个 JSON object；
+  - 键名必须使用 execution.repair.item_json_field 指定的值；
+  - value 必须是单行字符串，不得包含换行；
+  - 长度必须满足 constraints.min_chars_per_line 与 constraints.max_chars_per_line。
 
   【质量要求】
   - 每条结尾使用英文句号 "."；

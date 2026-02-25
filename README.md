@@ -15,12 +15,14 @@
 - `execution.generation.protocol`：`text` 或 `json_lines`
 - `execution.repair.granularity`：`whole` 或 `item`
 - `execution.fallback.disable_thinking_on_length_error`：`true/false`
+- 当 `execution.repair.granularity=item` 时，必须提供 `execution.repair.item_json_field`
 
 约束关系：
 
 - `protocol=text` 时，`output.format` 必须是 `plain_text`
 - `protocol=json_lines` 时，`output.format` 必须是 `json_object`
 - `granularity=item` 时，`output.lines` 必须大于 1
+- `granularity=item` 时，修复返回键名由 `execution.repair.item_json_field` 指定
 
 ## 版本号规范
 
