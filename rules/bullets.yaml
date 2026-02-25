@@ -25,6 +25,12 @@ execution:
     - constraints
     - instruction
   hard_rule: hard=true 的约束必须全部满足
+  generation:
+    protocol: json_lines
+  repair:
+    granularity: item
+  fallback:
+    disable_thinking_on_length_error: true
 instruction: |
   你只负责生成 Bullet Points 部分（仅英文）。
   先读取 output 和 constraints，再写文案；若冲突，以 output/constraints 为准。

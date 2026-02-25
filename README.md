@@ -8,6 +8,20 @@
 - `scripts/build_bundle.sh`：打包脚本，生成 `dist/rules-bundle.tar.gz`
 - `.github/workflows/release.yml`：发布流程（tag 触发），自动把规则包上传到 GitHub Releases
 
+## 规则 Schema（必填）
+
+`syl-listing` 已取消规则向后兼容，`rules/*.yaml` 必须显式包含以下字段：
+
+- `execution.generation.protocol`：`text` 或 `json_lines`
+- `execution.repair.granularity`：`whole` 或 `item`
+- `execution.fallback.disable_thinking_on_length_error`：`true/false`
+
+约束关系：
+
+- `protocol=text` 时，`output.format` 必须是 `plain_text`
+- `protocol=json_lines` 时，`output.format` 必须是 `json_object`
+- `granularity=item` 时，`output.lines` 必须大于 1
+
 ## 版本号规范
 
 发布 tag 必须匹配：`rules-v*`（否则不会触发发布 CI）。

@@ -27,6 +27,12 @@ execution:
     - constraints
     - instruction
   hard_rule: hard=true 的约束必须全部满足
+  generation:
+    protocol: text
+  repair:
+    granularity: whole
+  fallback:
+    disable_thinking_on_length_error: true
 instruction: |
   你只负责生成 Title 部分（英文单行）。
   必须先执行 constraints，再执行文案润色；若冲突，以 constraints 为最高优先级。
